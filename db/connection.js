@@ -12,8 +12,9 @@ var connection = mysql.createConnection({
     database: "employee_DB"
   });
 
-  connection.connect();
 
-
+  connection.connect(function (err) {
+    if (err) throw err;
+});
 
   module.exports.connection;
