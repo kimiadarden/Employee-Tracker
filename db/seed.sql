@@ -1,11 +1,8 @@
 USE employee_DB;
 
-INSERT INTO
-    department (name)
-VALUES
-    ('Engineering'),
-    ('HR'),
-    ('IT');
+INSERT into department (name) VALUES ('Engineering');
+INSERT into department (name) VALUES ('HR');
+INSERT into department (name) VALUES ('IT');
 
 
 INSERT INTO

@@ -2,8 +2,6 @@ const inquirer = require("inquirer");
 let Database = require("./db-index");
 let cTable = require("console.table");
 
-
-
 const db = new Database({
     host: "localhost",
     port: 3306,
@@ -13,20 +11,19 @@ const db = new Database({
 });
 
 
-
 async function initialPrompt() {
     return inquirer
         .prompt([
             {
                 type: "list",
-                message: "What would you like to do today?",
-                name: "action",
+                message: "What would you like to do?",
+                name: "userInit",
                 choices: [
-                  
-                  "View all departments",
-                  "View all employees",
-                  "View all roles",
-                  "Exit"
+
+                    "View all departments",
+                    "View all employees",
+                    "View all roles",
+                    "Exit"
                 ]
             }
         ])
@@ -54,6 +51,14 @@ async function main() {
                 await viewEntireDep();
                 break;
             }
+
+
+            case 'Exit': {
+                exitLoop = true;
+                process.exit(0); 
+                return;
+            }
+
         }
     }
 }
@@ -64,3 +69,4 @@ process.on("exit", async function (code) {
 });
 
 main();
+
