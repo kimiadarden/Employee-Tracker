@@ -31,3 +31,36 @@ async function initialPrompt() {
             }
         ])
 }
+
+
+
+async function viewEntireDep() {
+
+    let query = "SELECT * FROM department";
+    const rows = await db.query(query);
+    console.table(rows);
+}
+
+
+
+async function main() {
+    let exitLoop = false;
+    while (!exitLoop) {
+        const prompt = await initialPrompt();
+
+        switch (prompt.userInit) {
+
+            case 'View all departments': {
+                await viewEntireDep();
+                break;
+            }
+        }
+    }
+}
+
+process.on("exit", async function (code) {
+    await db.close();
+    return 
+});
+
+main();
