@@ -47,6 +47,14 @@ async function viewAllEmployees() {
     console.table(rows);
 }
 
+//showing the role list 
+async function viewEntireRole() {
+    let query = "SELECT * FROM role";
+    const rows = await db.query(query);
+    console.table(rows);
+    return rows;
+}
+
 
 async function main() {
     let exitLoop = false;
@@ -64,6 +72,12 @@ async function main() {
                 await viewAllEmployees();
                 break;
             }
+
+            case 'View all roles': {
+                await viewEntireRole();
+                break;
+            }
+
 
             case 'Exit': {
                 exitLoop = true;
