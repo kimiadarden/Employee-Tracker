@@ -30,7 +30,7 @@ async function initialPrompt() {
 }
 
 
-
+//showing the department list
 async function viewEntireDep() {
 
     let query = "SELECT * FROM department";
@@ -38,6 +38,14 @@ async function viewEntireDep() {
     console.table(rows);
 }
 
+
+//showing the employee list
+async function viewAllEmployees() {
+
+    let query = "SELECT * FROM employee";
+    const rows = await db.query(query);
+    console.table(rows);
+}
 
 
 async function main() {
@@ -52,6 +60,10 @@ async function main() {
                 break;
             }
 
+            case 'View all employees': {
+                await viewAllEmployees();
+                break;
+            }
 
             case 'Exit': {
                 exitLoop = true;
