@@ -26,17 +26,75 @@ async function initialPrompt() {
                     "Add new Department",
                     "Add new Employee",
                     "Add role",
-
-
+                    "Update the Rule of Employee",
                     "Exit"
                 ]
             }
         ])
 }
 
+
+
+async function userChoiceSwitch() {
+    let exitLoop = false;
+    while (!exitLoop) {
+        const prompt = await initialPrompt();
+
+        switch (prompt.userInit) {
+
+            case 'View all departments': {
+                await viewEntireDep();
+                break;
+            }
+
+            case 'View all employees': {
+                await viewAllEmployees();
+                break;
+            }
+
+            case 'View all roles': {
+                await viewEntireRole();
+                break;
+            }
+            case 'Add new Department': {
+                const newDepName = await getDepName();
+                await newDep(newDepName);
+                break;
+            }
+
+            case 'Add new Employee': {
+                const newEmployee = await getAddEmployeeInfo();
+                await addEmployee(newEmployee);
+                break;
+            }
+
+                case 'Add role': {
+                const newRole = await getRoleInfo();
+                console.log("add a role");
+                await addRole(newRole);
+                break;
+            }
+
+            case 'Update the Rule of Employee': {
+                const employee = await getUpdatedRule();
+                await updateRule(employee);
+                break;
+            }
+            
+            case 'Exit': {
+                exitLoop = true;
+                process.exit(0);
+                return;
+            }
+
+        }
+    }
+}
+
+
 //user input for the new rule :
 async function getRoleInfo() {
-    const departments = await getDepartmentNames();
+    const departments = await getNameOfDep();
     return inquirer
     .prompt([
         {
@@ -97,7 +155,7 @@ async function getAddEmployeeInfo() {
     }
 
 
-    
+
 //showing the department list
 async function viewEntireDep() {
 
@@ -171,6 +229,29 @@ async function getManagerNames() {
 }
 
 
+async function getNameOfDep() {
+    let query = "SELECT name FROM department";
+    const rows = await db.query(query);
+
+    let departments = [];
+    for(const row of rows) {
+        departments.push(row.name);
+    }
+    return departments;
+}
+
+async function addRole(roleInfo) {
+    const departmentId = await getDepId(roleInfo.departmentName);
+    const salary = roleInfo.salary;
+    const title = roleInfo.roleName;
+    let query = 'INSERT into role (title, salary, department_id) VALUES (?,?,?)';
+    let args = [title, salary, departmentId];
+    const rows = await db.query(query, args);
+    console.log("Added the new role");
+}
+
+
+
 
 async function getRoles() {
     let query = "SELECT title FROM role";
@@ -190,6 +271,14 @@ async function getRoleId(roleName) {
     const rows = await db.query(query, args);
     return rows[0].id;
 }
+
+async function getDepId(departmentName) {
+    let query = "SELECT * FROM department WHERE department.name=?";
+    let args = [departmentName];
+    const rows = await db.query(query, args);
+    return rows[0].id;
+}
+
 
 async function empID(fullName) {
     let employee = getFirstAndLastName(fullName);
@@ -216,62 +305,10 @@ function getFirstAndLastName( fullName ) {
 
 
 
-
-
-async function main() {
-    let exitLoop = false;
-    while (!exitLoop) {
-        const prompt = await initialPrompt();
-
-        switch (prompt.userInit) {
-
-            case 'View all departments': {
-                await viewEntireDep();
-                break;
-            }
-
-            case 'View all employees': {
-                await viewAllEmployees();
-                break;
-            }
-
-            case 'View all roles': {
-                await viewEntireRole();
-                break;
-            }
-            case 'Add new Department': {
-                const newDepName = await getDepName();
-                await newDep(newDepName);
-                break;
-            }
-
-            case 'Add new Employee': {
-                const newEmployee = await getAddEmployeeInfo();
-                await addEmployee(newEmployee);
-                break;
-            }
-
-                case 'Add role': {
-                const newRole = await getRoleInfo();
-                console.log("add a role");
-                await addRole(newRole);
-                break;
-            }
-
-            case 'Exit': {
-                exitLoop = true;
-                process.exit(0);
-                return;
-            }
-
-        }
-    }
-}
-
 process.on("exit", async function (code) {
     await db.close();
     return
 });
 
-main();
+userChoiceSwitch();
 
