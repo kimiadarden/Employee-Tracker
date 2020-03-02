@@ -58,7 +58,7 @@ async function userChoiceSwitch() {
                 break;
             }
             case 'Add new Employee': {
-                const newEmployee = await getAddEmployeeInfo();
+                const newEmployee = await getEmpInfo();
                 await addEmployee(newEmployee);
                 break;
             }
@@ -106,7 +106,7 @@ async function getRoleInfo() {
 }
 
 //user input to add new employee
-async function getAddEmployeeInfo() {
+async function getEmpInfo() {
     const managers = await getManagerNames();
     const roles = await getRoles();
     return inquirer
@@ -140,6 +140,17 @@ async function getAddEmployeeInfo() {
         ])
     }
 
+    async function getDepName() {
+        return inquirer
+        .prompt([
+            {
+                type: "input",
+                message: "What is the name of the new department that you want to add?",
+                name: "departmentName"
+            }
+        ])
+    }
+    
 //showing the department list
 async function viewEntireDep() {
 
@@ -164,16 +175,6 @@ async function viewEntireRole() {
     return rows;
 }
 
-async function getDepName() {
-    return inquirer
-    .prompt([
-        {
-            type: "input",
-            message: "What is the name of the new department that you want to add?",
-            name: "departmentName"
-        }
-    ])
-}
 
 async function newDep(departmentInfo) {
     const departmentName = departmentInfo.departmentName;
