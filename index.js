@@ -6,7 +6,7 @@ const db = new Database({
     host: "localhost",
     port: 3306,
     user: "root",
-    password: "",
+    password: "Workhard20!",
     database: "employee_DB"
 });
 
@@ -26,15 +26,13 @@ async function initialPrompt() {
                     "Add new Department",
                     "Add new Employee",
                     "Add role",
-                    "Update the Rule of Employee",
                     "Exit"
                 ]
             }
         ])
 }
 
-
-
+//depending on the user choice, we move to the appropiate case:
 async function userChoiceSwitch() {
     let exitLoop = false;
     while (!exitLoop) {
@@ -46,12 +44,10 @@ async function userChoiceSwitch() {
                 await viewEntireDep();
                 break;
             }
-
             case 'View all employees': {
                 await viewAllEmployees();
                 break;
             }
-
             case 'View all roles': {
                 await viewEntireRole();
                 break;
@@ -61,26 +57,17 @@ async function userChoiceSwitch() {
                 await newDep(newDepName);
                 break;
             }
-
             case 'Add new Employee': {
                 const newEmployee = await getAddEmployeeInfo();
                 await addEmployee(newEmployee);
                 break;
             }
-
                 case 'Add role': {
                 const newRole = await getRoleInfo();
                 console.log("add a role");
                 await addRole(newRole);
                 break;
             }
-
-            case 'Update the Rule of Employee': {
-                const employee = await getUpdatedRule();
-                await updateRule(employee);
-                break;
-            }
-            
             case 'Exit': {
                 exitLoop = true;
                 process.exit(0);
@@ -118,7 +105,6 @@ async function getRoleInfo() {
 ])
 }
 
-
 //user input to add new employee
 async function getAddEmployeeInfo() {
     const managers = await getManagerNames();
@@ -154,8 +140,6 @@ async function getAddEmployeeInfo() {
         ])
     }
 
-
-
 //showing the department list
 async function viewEntireDep() {
 
@@ -163,7 +147,6 @@ async function viewEntireDep() {
     const rows = await db.query(query);
     console.table(rows);
 }
-
 
 //showing the employee list
 async function viewAllEmployees() {
@@ -181,7 +164,6 @@ async function viewEntireRole() {
     return rows;
 }
 
-
 async function getDepName() {
     return inquirer
     .prompt([
@@ -193,9 +175,6 @@ async function getDepName() {
     ])
 }
 
-
-
-
 async function newDep(departmentInfo) {
     const departmentName = departmentInfo.departmentName;
     let query = 'INSERT into department (name) VALUES (?)';
@@ -203,8 +182,6 @@ async function newDep(departmentInfo) {
     const rows = await db.query(query, args);
     console.log("The new  department was added ");
 }
-
-
 
 async function addEmployee(employeeInfo) {
     let roleId = await getRoleId(employeeInfo.role);
@@ -228,7 +205,6 @@ async function getManagerNames() {
     return employeeNames;
 }
 
-
 async function getNameOfDep() {
     let query = "SELECT name FROM department";
     const rows = await db.query(query);
@@ -249,9 +225,6 @@ async function addRole(roleInfo) {
     const rows = await db.query(query, args);
     console.log("Added the new role");
 }
-
-
-
 
 async function getRoles() {
     let query = "SELECT title FROM role";
@@ -279,7 +252,6 @@ async function getDepId(departmentName) {
     return rows[0].id;
 }
 
-
 async function empID(fullName) {
     let employee = getFirstAndLastName(fullName);
 
@@ -302,8 +274,6 @@ function getFirstAndLastName( fullName ) {
     }
     return [first_name.trim(), last_name];
 }
-
-
 
 process.on("exit", async function (code) {
     await db.close();
