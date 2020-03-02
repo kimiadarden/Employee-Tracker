@@ -79,7 +79,7 @@ async function userChoiceSwitch() {
 }
 
 
-//user input for the new rule :
+//user input for the new role :
 async function getRoleInfo() {
     const departments = await getNameOfDep();
     return inquirer
