@@ -46,13 +46,18 @@ Function: viewAllEmployees
 
 - **I) Adding Departemnt**
 
-Function: getDepName
+Function to get users Input: getDepName
+
+Function to add users Input to the Database: addDep
 
 - **II) Adding roles:**
 
-Function: getRoleInfo
+Function to get users Input: getRoleInfo
+
+Function to add users Input to the Database: addRole
 - **II) Adding employees**
 
-Function: getEmpInfo
+Function to get users Input: getEmpInfo
 
+Function to add users Input to the Database:  addEmployee
 
