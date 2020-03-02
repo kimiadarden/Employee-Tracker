@@ -6,7 +6,7 @@ const db = new Database({
     host: "localhost",
     port: 3306,
     user: "root",
-    password: "",
+    password: "Workhard20!",
     database: "employee_DB"
 });
 
@@ -23,6 +23,8 @@ async function initialPrompt() {
                     "View all departments",
                     "View all employees",
                     "View all roles",
+                    "Add new Department",
+
                     "Exit"
                 ]
             }
@@ -56,6 +58,27 @@ async function viewEntireRole() {
 }
 
 
+async function getDepName() {
+    return inquirer
+    .prompt([
+        {
+            type: "input",
+            message: "What is the name of the new department that you want to add?",
+            name: "departmentName"
+        }
+    ])
+}
+
+
+async function newDep(departmentInfo) {
+    const departmentName = departmentInfo.departmentName;
+    let query = 'INSERT into department (name) VALUES (?)';
+    let args = [departmentName];
+    const rows = await db.query(query, args);
+    console.log("The new  department was added ");
+}
+
+
 async function main() {
     let exitLoop = false;
     while (!exitLoop) {
@@ -77,11 +100,15 @@ async function main() {
                 await viewEntireRole();
                 break;
             }
-
+            case 'Add new Department': {
+                const newDepName = await getDepName();
+                await newDep(newDepName);
+                break;
+            }
 
             case 'Exit': {
                 exitLoop = true;
-                process.exit(0); 
+                process.exit(0);
                 return;
             }
 
@@ -91,7 +118,7 @@ async function main() {
 
 process.on("exit", async function (code) {
     await db.close();
-    return 
+    return
 });
 
 main();
