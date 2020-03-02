@@ -61,3 +61,13 @@ Function to get users Input: getEmpInfo
 
 Function to add users Input to the Database:  addEmployee
 
+
+##  Functions using query to grab specific Data:
+
+- **)  Manager name Function:getManagerNames**
+- **)  Department name Function:getNameOfDep**
+- **)  List of roles Function: getRoles**
+- **)  List of roles ID Function :getRoleId**
+- **)  List of Department ID Function: getDepId**
+
+
