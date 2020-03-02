@@ -10,7 +10,7 @@ const db = new Database({
     database: "employee_DB"
 });
 
-
+//User initial prompt choice:
 async function initialPrompt() {
     return inquirer
         .prompt([
@@ -25,6 +25,7 @@ async function initialPrompt() {
                     "View all roles",
                     "Add new Department",
                     "Add new Employee",
+                    "Add role",
 
 
                     "Exit"
@@ -33,7 +34,70 @@ async function initialPrompt() {
         ])
 }
 
+//user input for the new rule :
+async function getRoleInfo() {
+    const departments = await getDepartmentNames();
+    return inquirer
+    .prompt([
+        {
+        type: "input",
+        message: "What is the title of the role?",
+        name: "roleName"
+    },
+    {
+        type: "input",
+        message: "What is the salary of the role?",
+        name: "salary"
+    },
+    {
+        type: "list",
+        message: "Which department do you want to add this role??",
+        name: "departmentName",
+        choices: [
+            ...departments
+        ]
+    }
+])
+}
 
+
+//user input to add new employee
+async function getAddEmployeeInfo() {
+    const managers = await getManagerNames();
+    const roles = await getRoles();
+    return inquirer
+    .prompt([
+        {
+            type: "input",
+            name: "first_name",
+            message: "What is the employee's first name?"
+        },
+            {
+                type: "input",
+                name: "last_name",
+                message: "What is the employee's last name?"
+            },
+            {
+                type: "list",
+                message: "What is the employee's role?",
+                name: "role",
+                choices: [
+                    ...roles
+                ]
+            },
+            {
+                type: "list",
+                message: "Who is the employee's manager?",
+                name: "manager",
+                choices: [
+                    ...managers
+                ]
+            }
+        ])
+    }
+
+
+    
 //showing the department list
 async function viewEntireDep() {
 
@@ -83,42 +147,6 @@ async function newDep(departmentInfo) {
 }
 
 
-
-async function getAddEmployeeInfo() {
-    const managers = await getManagerNames();
-    const roles = await getRoles();
-    return inquirer
-    .prompt([
-        {
-            type: "input",
-            name: "first_name",
-            message: "What is the employee's first name?"
-        },
-            {
-                type: "input",
-                name: "last_name",
-                message: "What is the employee's last name?"
-            },
-            {
-                type: "list",
-                message: "What is the employee's role?",
-                name: "role",
-                choices: [
-                    // populate from db
-                    ...roles
-                ]
-            },
-            {
-                type: "list",
-                message: "Who is the employee's manager?",
-                name: "manager",
-                choices: [
-                    // populate from db
-                    ...managers
-                ]
-            }
-        ])
-    }
 
 async function addEmployee(employeeInfo) {
     let roleId = await getRoleId(employeeInfo.role);
@@ -220,6 +248,13 @@ async function main() {
             case 'Add new Employee': {
                 const newEmployee = await getAddEmployeeInfo();
                 await addEmployee(newEmployee);
+                break;
+            }
+
+                case 'Add role': {
+                const newRole = await getRoleInfo();
+                console.log("add a role");
+                await addRole(newRole);
                 break;
             }
 
